@@ -1,0 +1,7 @@
+interface:
+  display_name: "本地视频粗剪到剪映"
+  short_description: "从本地素材和台本生成可继续精剪的剪映草稿"
+  default_prompt: "使用 $local-video-rough-cut-jianying 粗剪视频，视频素材和台本文件我放到了指定路径"
+
+policy:
+  allow_implicit_invocation: true
