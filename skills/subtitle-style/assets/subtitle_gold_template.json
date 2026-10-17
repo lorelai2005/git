@@ -1,0 +1,93 @@
+{
+  "template_name": "字幕基础模板",
+  "version": "1.0",
+  "assumptions": {
+    "distance_unit": "px",
+    "source_shadow_distance": 5,
+    "source_shadow_angle": -45,
+    "source_shadow_opacity": 0.7,
+    "source_blur": 0.15
+  },
+  "common_style": {
+    "font": "金陵体",
+    "font_color": "#FFFFFF",
+    "alignment": "center",
+    "scale_x": 100,
+    "scale_y": 100,
+    "shadow_color": "#000000",
+    "shadow_opacity": 0.7,
+    "shadow_angle": -45,
+    "ass_shadow_color": "&H4D000000",
+    "ass_primary_color": "&H00FFFFFF",
+    "ass_outline_color": "&H00000000",
+    "ass_border_style": 1
+  },
+  "resolutions": {
+    "1080x1920": {
+      "width": 1080,
+      "height": 1920,
+      "scale": 1,
+      "jianying": {
+        "font_size": 12,
+        "shadow_blur": 15,
+        "shadow_distance": 5,
+        "shadow_angle": -45
+      },
+      "ass": {
+        "font_size": 12,
+        "outline": 3.5,
+        "shadow": 5,
+        "x_shadow": -4,
+        "y_shadow": -4,
+        "position": {
+          "x": 540,
+          "y": 1320
+        }
+      }
+    },
+    "1728x3072": {
+      "width": 1728,
+      "height": 3072,
+      "scale": 1.6,
+      "jianying": {
+        "font_size": 19.2,
+        "shadow_blur": 15,
+        "shadow_distance": 8,
+        "shadow_angle": -45
+      },
+      "ass": {
+        "font_size": 19.2,
+        "outline": 5.5,
+        "shadow": 8,
+        "x_shadow": -6,
+        "y_shadow": -6,
+        "position": {
+          "x": 864,
+          "y": 2112
+        }
+      }
+    },
+    "2160x3840": {
+      "width": 2160,
+      "height": 3840,
+      "scale": 2,
+      "jianying": {
+        "font_size": 24,
+        "shadow_blur": 15,
+        "shadow_distance": 10,
+        "shadow_angle": -45
+      },
+      "ass": {
+        "font_size": 24,
+        "outline": 7,
+        "shadow": 10,
+        "x_shadow": -7,
+        "y_shadow": -7,
+        "position": {
+          "x": 1080,
+          "y": 1840
+        }
+      }
+    }
+  }
+}
