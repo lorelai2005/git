@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "renwei-script-assets": {
+      "command": "node",
+      "args": ["/data/tools/renwei-script-assets-mcp.js"],
+      "env": {
+        "RENWEI_DB_HOST": "${RENWEI_DB_HOST}",
+        "RENWEI_DB_PORT": "${RENWEI_DB_PORT}",
+        "RENWEI_DB_USER": "${RENWEI_DB_USER}",
+        "RENWEI_DB_PASSWORD": "${RENWEI_DB_PASSWORD}",
+        "RENWEI_DB_NAME": "${RENWEI_DB_NAME}"
+      }
+    }
+  }
+}
