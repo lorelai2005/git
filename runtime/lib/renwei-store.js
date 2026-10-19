@@ -1,5 +1,7 @@
 'use strict';
 
+const crypto = require('node:crypto');
+
 function getConfig() {
   return {
     host: process.env.RENWEI_DB_HOST || '127.0.0.1',
@@ -21,13 +23,16 @@ function loadMysql() {
   }
 }
 
+function uuid() { return crypto.randomUUID(); }
+function bounded(value, fallback, max) { return Math.min(Math.max(Number(value) || fallback, 1), max); }
+
 function createStore() {
   const mysql = loadMysql();
   const pool = mysql.createPool(getConfig());
 
   async function findClient(clientCodeOrName) {
     const [rows] = await pool.execute(
-      'SELECT id, client_code, client_name, status FROM clients WHERE client_code = ? OR client_name = ? LIMIT 1',
+      'SELECT id, client_code, name AS client_name, status FROM clients WHERE client_code = ? OR name = ? LIMIT 1',
       [clientCodeOrName, clientCodeOrName],
     );
     return rows[0] || null;
@@ -36,47 +41,51 @@ function createStore() {
   async function searchClientFacts({ clientId, query, limit = 30 }) {
     const like = `%${query || ''}%`;
     const [rows] = await pool.execute(
-      `SELECT id, fact_group, fact_key, fact_value, confirmation_status, permission_level,
-              sensitivity_level, source_document_id, source_locator, valid_from, valid_to
-         FROM client_facts
-        WHERE client_id = ?
-          AND confirmation_status IN ('confirmed', 'pending', 'restricted')
-          AND (fact_key LIKE ? OR fact_value LIKE ?)
-        ORDER BY confirmation_status = 'confirmed' DESC, updated_at DESC
+      `SELECT id, category AS fact_group, title AS fact_key, fact_text AS fact_value,
+              fact_type AS confirmation_status, permission_status AS permission_level,
+              source_document_id, source_locator, evidence_text, usable_for_script
+         FROM fact_items
+        WHERE client_id = ? AND fact_type IN ('confirmed', 'pending', 'inference')
+          AND (title LIKE ? OR fact_text LIKE ? OR evidence_text LIKE ?)
+        ORDER BY fact_type = 'confirmed' DESC, updated_at DESC
         LIMIT ?`,
-      [clientId, like, like, Math.min(Math.max(Number(limit) || 30, 1), 100)],
+      [clientId, like, like, like, bounded(limit, 30, 100)],
     );
     return rows;
   }
 
   async function listClientFacts({ clientId, includePending = true, limit = 100 }) {
-    const statuses = includePending ? ['confirmed', 'pending', 'restricted'] : ['confirmed'];
-    const placeholders = statuses.map(() => '?').join(',');
+    const types = includePending ? ['confirmed', 'pending', 'inference'] : ['confirmed'];
+    const placeholders = types.map(() => '?').join(',');
     const [rows] = await pool.execute(
-      `SELECT id, fact_group, fact_key, fact_value, confirmation_status, permission_level,
-              sensitivity_level, source_document_id, source_locator, valid_from, valid_to
-         FROM client_facts
-        WHERE client_id = ? AND confirmation_status IN (${placeholders})
-        ORDER BY fact_group, fact_key, updated_at DESC
+      `SELECT id, category AS fact_group, title AS fact_key, fact_text AS fact_value,
+              fact_type AS confirmation_status, permission_status AS permission_level,
+              source_document_id, source_locator, evidence_text, usable_for_script
+         FROM fact_items
+        WHERE client_id = ? AND fact_type IN (${placeholders})
+        ORDER BY category, title, updated_at DESC
         LIMIT ?`,
-      [clientId, ...statuses, Math.min(Math.max(Number(limit) || 100, 1), 500)],
+      [clientId, ...types, bounded(limit, 100, 500)],
     );
     return rows;
   }
 
   async function searchLogicPatterns({ query, platform, limit = 20 }) {
     const like = `%${query || ''}%`;
-    const params = [like, like, like, like, like, like, like];
-    let sql = `SELECT id, logic_code, source_url, source_account_id, source_account_name, platform,
-                      title, hook, structure, speech_style, rhythm, selling_points, target_audience,
-                      evidence_status, source_locator, logic_signature
+    const params = [like, like, like, like, like, like, like, like];
+    let sql = `SELECT id, benchmark_video_id, industry, account_type,
+                      pattern_name, applicable_goals, audience_emotion, core_mechanism,
+                      structure_summary, opening_pattern, conflict_pattern, proof_pattern,
+                      transition_pattern, cta_pattern, reusable_template, limitations,
+                      evidence_status, tags
                  FROM logic_patterns
-                WHERE evidence_status IN ('verified', 'inference', 'pending')
-                  AND (title LIKE ? OR hook LIKE ? OR structure LIKE ? OR speech_style LIKE ?
-                       OR rhythm LIKE ? OR selling_points LIKE ? OR target_audience LIKE ?)`;
-    if (platform) { sql += ' AND platform = ?'; params.push(platform); }
-    sql += ' ORDER BY evidence_status = \'verified\' DESC, updated_at DESC LIMIT ?';
-    params.push(Math.min(Math.max(Number(limit) || 20, 1), 100));
+                WHERE evidence_status IN ('confirmed', 'inference', 'pending')
+                  AND (pattern_name LIKE ? OR core_mechanism LIKE ? OR structure_summary LIKE ?
+                       OR opening_pattern LIKE ? OR conflict_pattern LIKE ? OR proof_pattern LIKE ?
+                       OR reusable_template LIKE ? OR limitations LIKE ?)`;
+    if (platform) { sql += ' AND JSON_UNQUOTE(JSON_EXTRACT(tags, \'$.platform\')) = ?'; params.push(platform); }
+    sql += ' ORDER BY evidence_status = \'confirmed\' DESC, updated_at DESC LIMIT ?';
+    params.push(bounded(limit, 20, 100));
     const [rows] = await pool.execute(sql, params);
     return rows;
   }
@@ -89,14 +98,14 @@ function createStore() {
     }
     if (!clauses.length) return [];
     const [rows] = await pool.execute(
-      `SELECT id, account_id, account_name, logic_pattern_id, content_id, content_title,
+      `SELECT id, account_id, logic_pattern_id, content_id, content_title,
               logic_signature, hook_signature, structure_signature, speech_signature,
               selling_point_signature, usage_status, source_locator, used_at
          FROM account_logic_usage
         WHERE client_id = ? AND account_id = ? AND usage_status IN ('used', 'candidate')
           AND (${clauses.join(' OR ')})
         ORDER BY used_at DESC LIMIT ?`,
-      [...params, Math.min(Math.max(Number(limit) || 20, 1), 100)],
+      [...params, bounded(limit, 20, 100)],
     );
     return rows;
   }
@@ -104,9 +113,9 @@ function createStore() {
   async function logRetrieval({ requestId, clientId, accountId, operation, query, resultIds, warnings }) {
     await pool.execute(
       `INSERT INTO agent_retrieval_logs
-        (request_id, client_id, account_id, operation, query_text, result_count, result_ids, warnings)
-       VALUES (?, ?, ?, ?, ?, ?, CAST(? AS JSON), CAST(? AS JSON))`,
-      [requestId, clientId || null, accountId || null, operation, query || null,
+        (id, request_id, client_id, account_id, operation, query_text, result_count, result_ids, warnings)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [uuid(), requestId, clientId || null, accountId || null, operation, query || null,
        resultIds.length, JSON.stringify(resultIds), JSON.stringify(warnings || [])],
     );
   }
