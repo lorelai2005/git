@@ -1,0 +1,29 @@
+{
+  "benchmark_id": "REPLACE_YYYYMMDD-01",
+  "client_id": "REPLACE_ID",
+  "is_sample": false,
+  "note": "对标视频拆解。只记录可复用的结构，不抄文案、不抄人设。",
+  "source": {
+    "platform": "抖音",
+    "url": "",
+    "author": "",
+    "published_at": "",
+    "duration_s": 60,
+    "stats": {"like": null, "comment": null, "share": null, "note": "抓取时间点的数据"}
+  },
+  "why_pick": "为什么把它当对标：数据好？结构像？人群重合？",
+  "hook": {
+    "first_3s_visual": "第一帧画面是什么",
+    "first_3s_audio": "第一句话是什么",
+    "hook_type": "结果前置 / 提问 / 反差 / 痛点动作",
+    "retention_devices": ["3 秒内给了什么理由让人不划走"]
+  },
+  "beats": [
+    {"t": "0—3秒", "what": "画面发生了什么", "why": "为什么这么排", "switch": "能不能换成我们的场景"}
+  ],
+  "logic_id": "对应爆款逻辑库的 id，例如 LOCAL-LANDMARK-OPENING",
+  "reusable": ["可以搬的结构 / 节奏 / 机位"],
+  "not_reusable": ["不能搬的部分：人设、口头禅、具体数据、他人素材"],
+  "teardown_by": "",
+  "teardown_at": ""
+}

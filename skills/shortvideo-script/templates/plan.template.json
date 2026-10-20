@@ -1,0 +1,24 @@
+{
+  "goal_id": "REPLACE_GOAL_ID",
+  "client_id": "REPLACE_ID",
+  "account_id": "REPLACE_ACCOUNT_ID",
+  "title": "本次任务名（例：周年庆 3 条 / 新品上新 2 条）",
+  "goal": {
+    "summary": "这次要让人知道什么、记住什么、做什么。",
+    "type": ["开业", "同城到店"],
+    "primary_kpi": "曝光 / 到店 / 咨询 / 加微",
+    "success_signal": "什么样的评论或数据说明成了"
+  },
+  "platform": "抖音短视频",
+  "count": 5,
+  "duration": {"min": 50, "max": 70, "note": "单条时长区间"},
+  "audience": "核心客群",
+  "deliverable": "拍摄执行版 PDF",
+  "must_mention": ["必须出现的信息"],
+  "must_avoid": ["不许说什么"],
+  "confirmed_from_plan": ["已与客户确认过的条目"],
+  "open_questions": ["还没确认、出片前必须问清的条目"],
+  "confirmed_by": "",
+  "confirmed_at": "",
+  "status": "draft"
+}

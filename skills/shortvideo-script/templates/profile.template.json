@@ -1,0 +1,39 @@
+{
+  "client_id": "REPLACE_ID",
+  "name": "客户名 / 品牌名",
+  "aliases": [],
+  "industry": "女装实体店",
+  "city": "",
+  "district": "",
+  "one_liner": "一句话说清：谁、在哪、提供什么、为什么选你。",
+  "positioning": "差异点与不做什么。",
+  "audience": {
+    "core": "核心客群（年龄 + 地域 + 身份）",
+    "secondary": [],
+    "jobs": ["顾客要完成的任务：上班通勤 / 送礼 / 聚餐…"],
+    "where": "在哪个平台、哪个商圈触达他们"
+  },
+  "style_tags": [],
+  "differentiators": [],
+  "platforms": ["抖音短视频"],
+  "tone": {
+    "voice": "说话方式，尽量用一句可模仿的描述",
+    "do": [],
+    "avoid": []
+  },
+  "facts": [
+    {"key": "address", "label": "门店位置", "value": "", "status": "pending", "source": "", "updated": ""},
+    {"key": "example_confirmed", "label": "示例：已确认事实", "value": "", "status": "confirmed", "source": "主理人确认", "updated": ""}
+  ],
+  "pending": [
+    {"key": "opening_date", "question": "待确认问题", "blocks": ["会卡住哪些镜头或表述"]}
+  ],
+  "banned_claims": ["最", "第一", "唯一", "顶级", "国家级", "保证", "百分百"],
+  "visual_identity": {
+    "palette": [],
+    "avoid": [],
+    "note": ""
+  },
+  "created": "",
+  "updated": ""
+}

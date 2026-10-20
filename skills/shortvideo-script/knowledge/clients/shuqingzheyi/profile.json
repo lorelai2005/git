@@ -1,0 +1,60 @@
+{
+  "client_id": "shuqingzheyi",
+  "name": "淑情哲依",
+  "aliases": ["淑情哲依女装", "SQZY"],
+  "industry": "女装实体店",
+  "city": "武汉",
+  "district": "菱角湖万达商圈",
+  "one_liner": "开在菱角湖万达旁边的实体女装店，主打极简通勤风和静奢老钱风，到店可免费帮忙搭衣服。",
+  "positioning": "不是线上款集合店，而是能到店试穿、有人认真帮你搭配的社区型实体店；把「不推销、可自由试穿」当差异点。",
+  "audience": {
+    "core": "武汉本地 25—40 岁女性",
+    "secondary": ["上班通勤族", "周末需要体面穿搭的人", "不喜欢被推销的顾客"],
+    "jobs": ["上班通勤穿搭", "周末出门", "见客户/正式场合", "解决「买了不少还是不会搭」"],
+    "where": "抖音同城、门店周边 3 公里"
+  },
+  "style_tags": ["极简通勤风", "静奢老钱风"],
+  "differentiators": [
+    "到店免费搭衣服，不推销",
+    "两种风格各有明确使用场景",
+    "主理人本人守店，经历可讲",
+    "开业期有抽奖墙、美甲、艺术照等体验"
+  ],
+  "platforms": ["抖音短视频", "门店宣传"],
+  "tone": {
+    "voice": "武汉本地、平实、像店主跟熟客说话；短句，口语，不堆砌形容词。",
+    "do": ["用「你/你们」称呼", "地点说到门牌/几号门", "数量说区间并加「以现场为准」"],
+    "avoid": ["高级定制", "高定", "奢侈品", "保证显瘦", "店长推荐式硬广腔"]
+  },
+  "facts": [
+    {"key": "address", "label": "门店位置", "value": "菱角湖万达 3 号门斜对面", "status": "confirmed", "source": "主理人确认", "updated": "2026-02-10"},
+    {"key": "style_1", "label": "主打风格一", "value": "极简通勤风", "status": "confirmed", "source": "主理人确认", "updated": "2026-02-10"},
+    {"key": "style_2", "label": "主打风格二", "value": "静奢老钱风", "status": "confirmed", "source": "主理人确认", "updated": "2026-02-10"},
+    {"key": "free_styling", "label": "免费服务", "value": "到店可免费搭衣服", "status": "confirmed", "source": "主理人确认", "updated": "2026-02-10"},
+    {"key": "opening_activities", "label": "开业体验项目", "value": "抽奖墙、美甲、艺术照", "status": "confirmed", "source": "主理人确认", "updated": "2026-02-10"},
+    {"key": "gift_quantity", "label": "果篮与伴手礼盒数量", "value": "果篮和伴手礼盒各 50—100 份", "status": "confirmed", "source": "主理人确认", "updated": "2026-02-10", "caveat": "发布前需核对剩余数量与领取条件"},
+    {"key": "audience", "label": "目标客群", "value": "25 到 40 岁的女生", "status": "confirmed", "source": "策划案", "updated": "2026-02-10"},
+    {"key": "founder_bg", "label": "主理人经历", "value": "从服务员到女装店主", "status": "confirmed", "source": "主理人本人", "updated": "2026-02-10"},
+    {"key": "store_type", "label": "店型", "value": "实体女装店", "status": "confirmed", "source": "策划案", "updated": "2026-02-10"},
+    {"key": "opening_date", "label": "正式开业日期", "value": "", "status": "pending", "source": "", "updated": "2026-02-10"},
+    {"key": "business_hours", "label": "营业时间", "value": "", "status": "pending", "source": "", "updated": "2026-02-10"},
+    {"key": "contact", "label": "咨询方式", "value": "", "status": "pending", "source": "", "updated": "2026-02-10"},
+    {"key": "claim_rule", "label": "领取条件与名额", "value": "", "status": "pending", "source": "", "updated": "2026-02-10"},
+    {"key": "douyin_checkin", "label": "是否设置抖音到店识别", "value": "", "status": "pending", "source": "", "updated": "2026-02-10"}
+  ],
+  "pending": [
+    {"key": "opening_date", "question": "正式开业日期是哪天？", "blocks": ["口播报日期", "结尾字幕"]},
+    {"key": "business_hours", "question": "营业时间怎么定？", "blocks": ["结尾字幕", "到店引导"]},
+    {"key": "contact", "question": "咨询用电话还是微信？", "blocks": ["结尾咨询方式"]},
+    {"key": "claim_rule", "question": "果篮/伴手礼盒的领取条件和名额是什么？", "blocks": ["福利类口播的合规表述"]},
+    {"key": "douyin_checkin", "question": "是否做抖音到店识别码/口令？", "blocks": ["03 号脚本到店说辞"]}
+  ],
+  "banned_claims": ["高级定制", "高定", "奢侈品", "保证显瘦", "显瘦十斤", "人人有份", "人无我有"],
+  "visual_identity": {
+    "palette": ["低饱和米白", "灰调", "深咖"],
+    "avoid": ["高饱和撞色", "网红滤镜"],
+    "note": "画面以真实店内环境为主，不用样板间式摆拍"
+  },
+  "updated": "2026-02-10",
+  "created": "2026-02-10"
+}

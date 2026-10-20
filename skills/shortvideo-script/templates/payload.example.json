@@ -1,0 +1,41 @@
+{
+  "client_id": "REPLACE_CLIENT_ID",
+  "account_id": "REPLACE_ACCOUNT_ID",
+  "goal_id": "REPLACE_GOAL_ID",
+  "meta": {
+    "title": "{客户名} | {任务名} N 条短视频拍摄执行版",
+    "platform": "抖音短视频",
+    "audience": "{地域} {年龄} {身份}",
+    "common_goal": "让用户知道什么、记住什么、做什么。",
+    "unified_facts": "全篇共用口径：位置 / 风格 / 福利 / 「以门店最终确认信息为准」。"
+  },
+  "scripts": [
+    {
+      "no": "01",
+      "title": "{场景类型}：{一句人话}",
+      "logic_id": "LOCAL-LANDMARK-OPENING",
+      "structure": "步骤一 → 步骤二 → 步骤三 → 步骤四 → 步骤五",
+      "hook": "开头钩子（口播首段的压缩版）",
+      "voiceover": [
+        "首段：点名人群 + 结果（钩子落地）",
+        "中段：一件事一段",
+        "末段：到店引导 + 免责"
+      ],
+      "shoot": [
+        {
+          "time": "0—3秒",
+          "picture": "拍什么 + 怎么拍（机位/景别/动作）",
+          "audio": "“这一段实际说出口的话”",
+          "note": "必须做什么；禁止做什么"
+        }
+      ],
+      "tags": "#品牌 #品类 #地标"
+    }
+  ],
+  "final_check": [
+    "补齐并核对：{缺什么补什么}",
+    "不得把「{数字}」表达成人人可领；应说明数量有限或以现场规则为准。",
+    "顾客、员工和路人出镜前取得肖像使用许可。"
+  ],
+  "final_check_title": "N 条脚本统一发布前核对"
+}

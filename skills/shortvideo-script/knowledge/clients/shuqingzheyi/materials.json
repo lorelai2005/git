@@ -1,0 +1,52 @@
+{
+  "client_id": "shuqingzheyi",
+  "updated": "2026-02-10",
+  "note": "客户素材库：只登记「已经能拍」的东西。写脚本时只允许从 status=available 的条目取材，unavailable / pending 只能用来提示客户补拍。",
+  "scenes": [
+    {"id": "sc-door", "name": "门店门头与招牌", "status": "available", "location": "菱角湖万达 3 号门斜对面", "best_time": "白天自然光", "shot_hint": "正拍招牌全称，留出上方空间；再补一个斜 45° 带路口的机位", "tags": ["门头", "地标", "招牌", "同城"]},
+    {"id": "sc-window", "name": "橱窗与当季陈列", "status": "available", "location": "店外橱窗", "shot_hint": "贴近玻璃拍，注意反光；内部打光时从侧面拍", "tags": ["橱窗", "陈列", "货品"]},
+    {"id": "sc-interior", "name": "店内全景与货架挂杆", "status": "available", "shot_hint": "广角站在门口向内拍，展示纵深；再补货架横移", "tags": ["店内", "全景", "货架", "环境"]},
+    {"id": "sc-mirror", "name": "试衣镜与试穿区", "status": "available", "shot_hint": "镜前转身、整理袖口的细节；避免拍到镜中其他顾客", "tags": ["试衣", "镜子", "细节", "试穿"]},
+    {"id": "sc-lottery", "name": "抽奖墙", "status": "available", "shot_hint": "正面平拍抽奖墙全貌，再补手抽奖的特写", "tags": ["抽奖墙", "开业活动", "福利"]},
+    {"id": "sc-nail", "name": "美甲区", "status": "available", "shot_hint": "手部特写＋区域全景各一条", "tags": ["美甲", "开业活动", "体验"]},
+    {"id": "sc-portrait", "name": "艺术照拍摄区", "status": "available", "shot_hint": "布景全貌＋拍摄过程，注意顾客授权", "tags": ["艺术照", "开业活动", "体验"]},
+    {"id": "sc-gifts", "name": "果篮与伴手礼盒陈列区", "status": "available", "shot_hint": "俯拍堆头数量感，再拍领取动作", "tags": ["果篮", "伴手礼", "数量", "福利"]},
+    {"id": "sc-outside", "name": "店门外退镜机位", "status": "available", "shot_hint": "从店内后退到门外，收进招牌和街景，用于结尾", "tags": ["门头", "收尾", "退镜", "地标"]},
+    {"id": "sc-street", "name": "路口与 3 号门方向指引", "status": "unavailable", "shot_hint": "开业首日人流大时补拍", "tags": ["路口", "指引", "地标"]}
+  ],
+  "actions": [
+    {"id": "ac-point", "name": "主理人指向门店方向", "status": "available", "tags": ["指引", "门头", "地标"]},
+    {"id": "ac-fold", "name": "整理衣架、熨烫、码货", "status": "available", "tags": ["经营动作", "真实感", "主理人"]},
+    {"id": "ac-style-two", "name": "为顾客搭配两套衣服", "status": "available", "tags": ["搭配", "免费服务", "顾客"]},
+    {"id": "ac-pick", "name": "挑选上衣与下装", "status": "available", "tags": ["搭配", "货品"]},
+    {"id": "ac-turn", "name": "镜前转身、整理袖口", "status": "available", "tags": ["试穿", "细节", "风格"]},
+    {"id": "ac-hold-two", "name": "左右手各拿一套不同风格服装", "status": "available", "tags": ["风格对比", "选择题"]},
+    {"id": "ac-exit", "name": "镜头从店内退到门外", "status": "available", "tags": ["收尾", "退镜"]},
+    {"id": "ac-look-up", "name": "整理衣服后抬头看镜头", "status": "available", "tags": ["主理人", "开场"]}
+  ],
+  "people": [
+    {"id": "pp-owner", "name": "主理人", "role": "店主", "consent": "confirmed", "status": "available", "note": "本人出镜，口播保持真实表达，不给逐字稿", "tags": ["主理人", "出镜", "故事"]},
+    {"id": "pp-customer", "name": "到店顾客", "role": "顾客", "consent": "pending", "status": "available", "note": "每次拍摄前单独取得肖像使用许可，未授权只拍背影或手部", "tags": ["顾客", "证言", "试穿"]},
+    {"id": "pp-staff", "name": "店员", "role": "员工", "consent": "pending", "status": "available", "tags": ["员工", "出镜"]}
+  ],
+  "props": [
+    {"id": "pr-giftbox", "name": "伴手礼盒", "status": "available", "tags": ["福利", "赠品"]},
+    {"id": "pr-basket", "name": "果篮", "status": "available", "tags": ["福利", "赠品"]},
+    {"id": "pr-lottery", "name": "抽奖箱与奖券", "status": "available", "tags": ["抽奖墙", "活动"]},
+    {"id": "pr-outfits", "name": "两套主打风格在售款", "status": "available", "tags": ["货品", "试穿", "风格"]}
+  ],
+  "segments": [
+    {"id": "sg-free-styling", "name": "免费搭衣服服务", "proof": "到店可现场演示整套服务流程", "status": "available", "sellable": true, "tags": ["免费服务", "搭配", "到店体验"]},
+    {"id": "sg-two-styles", "name": "极简通勤风 / 静奢老钱风", "proof": "两套在售货品可上身对比", "status": "available", "sellable": true, "tags": ["风格", "对比", "货品"]},
+    {"id": "sg-opening-events", "name": "开业体验：抽奖墙/美甲/艺术照", "proof": "现场已搭建", "status": "available", "sellable": true, "tags": ["开业活动", "福利", "体验"]},
+    {"id": "sg-founder-story", "name": "主理人从服务员到店主", "proof": "本人可复述", "status": "available", "sellable": true, "tags": ["主理人", "故事", "信任"]},
+    {"id": "sg-location", "name": "菱角湖万达 3 号门斜对面", "proof": "门头可定位", "status": "available", "sellable": true, "tags": ["地标", "同城", "到店"]},
+    {"id": "sg-price", "name": "价格带与折扣", "proof": "客户尚未确认，禁止出现在脚本里", "status": "unavailable", "sellable": false, "tags": ["价格"]}
+  ],
+  "voice_lines": [
+    {"text": "这里不是让你进门就被推销，而是可以先自己看款、试穿。", "who": "主理人", "verified": true, "tags": ["不推销", "服务理念"]},
+    {"text": "如果不合适就换，想自己慢慢逛也可以。", "who": "主理人", "verified": true, "tags": ["无压力", "试穿"]},
+    {"text": "我最想做的事情很简单：让 25 到 40 岁的女生，来到店里可以舒服地选衣服、试衣服。", "who": "主理人", "verified": true, "tags": ["理念", "主理人"]},
+    {"text": "从服务员到女装店主，我终于把店开到了这边。", "who": "主理人", "verified": true, "tags": ["经历", "故事"]}
+  ]
+}

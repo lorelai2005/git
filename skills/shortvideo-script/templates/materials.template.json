@@ -1,0 +1,23 @@
+{
+  "client_id": "REPLACE_ID",
+  "updated": "",
+  "note": "只登记「已经能拍」的东西。status=available 才能被写进脚本；unavailable/pending 只用来说明缺什么。",
+  "scenes": [
+    {"id": "sc-1", "name": "场景名（门头 / 橱窗 / 操作台 / 包间）", "status": "available", "location": "", "best_time": "", "shot_hint": "怎么拍最出效果，一句话", "tags": ["门头", "地标"]}
+  ],
+  "actions": [
+    {"id": "ac-1", "name": "可拍动作（整理、指向、上手演示）", "status": "available", "tags": []}
+  ],
+  "people": [
+    {"id": "pp-1", "name": "主理人", "role": "店主", "consent": "confirmed", "status": "available", "note": "出镜授权与拍摄偏好", "tags": ["主理人"]}
+  ],
+  "props": [
+    {"id": "pr-1", "name": "道具 / 赠品 / 招牌产品", "status": "available", "tags": []}
+  ],
+  "segments": [
+    {"id": "sg-1", "name": "可拆解卖点段（能被一条视频讲透的最小单位）", "proof": "现场怎么验证它真的存在", "status": "available", "sellable": true, "tags": []}
+  ],
+  "voice_lines": [
+    {"text": "主理人说过的、可原样使用的一句话", "who": "主理人", "verified": true, "tags": []}
+  ]
+}
