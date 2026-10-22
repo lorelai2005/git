@@ -1,0 +1,113 @@
+# 本地 Skill 的运行映射说明，不是 Crabot 自动安装脚本。
+# 实际工具注册在服务器 /data/admin/mcp-servers.json；修改本文件不会更改线上配置。
+id: douyin-account-review
+name: 抖音账号数据复盘
+version: 2.1.0
+owner: 仁维运营中台
+status: ready
+enabled: true
+integration_mode: external_mcp
+requires_existing_deployment: true
+entry_document: SKILL.md
+description: >
+  本机专用 Chrome 复用登录态，每三天采集最近三个自然月的抖音创作者后台数据，
+  自动写入 PostgreSQL renwei_script.review。用户说“给我最近{客户名称或账号ID}的账号数据”时，
+  Crabot 读库，生成包含账号数据复盘与数据提升方案的单份文档并返回发起请求的前端会话。
+
+command:
+  template: "给我最近{account_identifier}的账号数据"
+  default_intent: account_review_document
+  default_window_calendar_months: 3
+  examples:
+    - "给我最近淑情哲依的账号数据"
+    - "给我最近82713045072的账号数据"
+  account_identifier_types: [client_name, client_code, douyin_id, database_account_id]
+  account_resolution: exact_authorized_binding
+  ambiguous_match: ask_for_account_id
+  unknown_or_unconnected_account: report_not_connected
+  fallback_to_example_account: false
+
+triggers:
+  - type: natural_language
+    channels: [crabot_frontend, feishu_mention]
+    patterns:
+      - "给我最近*的账号数据"
+
+collection:
+  mode: local_persistent_browser
+  browser: chrome
+  login: manual_scan_then_reuse_profile
+  permanent_login_guaranteed: false
+  account: "82713045072"
+  profile_dir: 'E:\chatgpt\douyin-account-82713045072\browser-profile'
+  runner: 'E:\chatgpt\douyin-account-82713045072\run-daily.ps1'
+  sync_script: 'E:\chatgpt\douyin-account-82713045072\sync_account.py'
+  sync_arguments: [--publish]
+  schedule:
+    executor: windows_task_scheduler
+    task_name: Renwei-Douyin-82713045072-Daily
+    days_interval: 3
+    local_time: "13:00"
+    timezone: Asia/Shanghai
+    create_server_schedule: false
+  window:
+    calendar_months: 3
+    account_daily_end: yesterday
+  ingest_script: /data/tools/douyin-account-82713045072/ingest-postgres.cjs
+  preserve_profile_on_client: true
+  upload_profile_or_cookies: false
+
+mcp:
+  server_name: douyin-account-82713045072
+  supported_accounts: ["82713045072"]
+  tools:
+    - name: douyin_account_status
+      arguments: {}
+      purpose: 核对数据库最新状态和历史覆盖
+    - name: douyin_account_table
+      arguments: {account: "82713045072", offset: 0, limit: 50}
+      purpose: 汇总、作品表和Excel路径；按next_offset分页
+    - name: douyin_account_daily
+      arguments: {account: "82713045072", offset: 0, limit: 31}
+      purpose: 规范化逐日指标；按next_offset分页
+
+storage:
+  engine: postgresql
+  database: renwei_script
+  schema: review
+  daily_metrics: review.metric_snapshot
+  content: review.content
+  content_snapshots: review.content_snapshot
+  raw_data: review.collect_raw
+  collection_logs: review.collect_run_log
+  schedule_record: review.collect_task
+  transactional_import: true
+  duplicate_report_import: no_new_records
+  missing_value: null
+  missing_flag: is_missing
+  missing_date_source: not_returned
+  database_credentials_location: server_only
+  crabot_access: read_only
+
+delivery:
+  artifact_count: 1
+  primary_format: docx
+  alternative_format: accessible_online_document
+  required_sections: [account_data_review, data_improvement_plan]
+  filename_template: "{client_name}_{account_id}_账号数据复盘与提升方案_{date}.docx"
+  target: requesting_frontend_conversation
+  optional_data_attachment: xlsx
+  data_attachment_replaces_document: false
+  success_requires: document_created_and_accessible_to_requester
+  server_path_is_download_link: false
+  current_mcp_includes_document_generation: false
+  current_mcp_includes_attachment_upload: false
+  frontend_document_delivery_verified: false
+  reference: references/review-document-delivery.md
+
+legacy:
+  cli: dyreview
+  active_for_this_workflow: false
+  note: src、config、deploy及旧参考文档仍为OAuth实现；当前链路不调用旧CLI或旧dy库。
+
+reference: references/browser-postgres-workflow.md

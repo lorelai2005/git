@@ -1,0 +1,33 @@
+# 抖音账号数据复盘 Skill —— 定时任务样例
+# 安装：sudo cp deploy/crontab.example /etc/cron.d/douyin-account-review
+#       sudo chmod 644 /etc/cron.d/douyin-account-review
+# 注意：
+#   1) cron 不会自动读 .env，必须显式 source；
+#   2) 用绝对路径（cron 的 PATH 很干净）；
+#   3) 输出重定向到日志，避免 cron 发邮件；
+#   4) 时区按服务器本地时间解释，部署前用 `date` 确认服务器是 Asia/Shanghai。
+
+SHELL=/bin/bash
+SKILL_DIR=/opt/renwei/skills/douyin-account-review
+PY=$SKILL_DIR/.venv/bin/python
+LOG=$SKILL_DIR/var/logs
+
+# 每 3 小时增量采集（错开整点，降低与其它任务撞车的概率）
+15 */3 * * * renwei cd $SKILL_DIR && set -a && . ./.env && set +a && $PY -m dyreview collect --account all --kind incremental >> $LOG/collect.log 2>&1
+
+# 每天 04:40 巡检 refresh_token，快到期就续期（防止客户被动掉授权）
+40 4 * * * renwei cd $SKILL_DIR && set -a && . ./.env && set +a && $PY -m dyreview token keepalive >> $LOG/token.log 2>&1
+
+# 每周一 03:20 全量采集（补历史作品指标 + 粉丝画像）
+20 3 * * 1 renwei cd $SKILL_DIR && set -a && . ./.env && set +a && $PY -m dyreview collect --account all --kind full >> $LOG/collect.log 2>&1
+
+# 每周一 08:30 给每个客户账号自动出上周复盘并推送（可选，客户不需要就别开）
+# 说明：这是 handoff 模式下的"只出事实包"，报告由 Crabot 侧生成后推送；
+#       如果要全自动（Skill 自己调模型），把 --llm 改成 builtin 并配好 llm.*。
+# 30 8 * * 1 renwei cd $SKILL_DIR && set -a && . ./.env && set +a && $PY -m dyreview run --account 客户账号名 --days 7 --no-push >> $LOG/review.log 2>&1
+
+# 每天 05:00 自检，异常时在日志里留痕（配合外部监控告警）
+0 5 * * * renwei cd $SKILL_DIR && set -a && . ./.env && set +a && $PY -m dyreview doctor >> $LOG/doctor.log 2>&1
+
+# 每月 1 号 05:50 清理历史快照（默认保留 730 天）
+50 5 1 * * renwei cd $SKILL_DIR && set -a && . ./.env && set +a && $PY -m dyreview prune >> $LOG/prune.log 2>&1

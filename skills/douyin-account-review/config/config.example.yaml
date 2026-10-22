@@ -1,0 +1,114 @@
+# =============================================================================
+# 抖音账号数据复盘 Skill —— 配置样例
+# 复制为 config/config.yaml 后修改。${VAR} 由环境变量注入（见 .env.example）。
+# 生产环境务必把 config/config.yaml 与 .env 一起排除出版本库。
+# =============================================================================
+
+skill:
+  name: douyin-account-review
+  version: 1.0.0
+  timezone: Asia/Shanghai
+  # --- 公共约束：防递归 / 防重复 ---
+  max_tool_steps_per_review: 8      # 单次复盘最多工具步数，超限直接返回已得结论
+  max_llm_rounds: 2                 # 大模型最多两轮（生成 + 一次修订），禁止自我循环
+  review_dedupe_minutes: 10         # 同账号 N 分钟内重复触发 -> 返回上一次结果，不重复烧 token
+  collect_dedupe_minutes: 5         # 同账号并发采集互斥
+
+database:
+  dsn: ${DYREVIEW_DB_DSN}
+  schema: dy
+  statement_timeout_ms: 30000
+  connect_timeout_seconds: 10
+
+crypto:
+  key: ${DYREVIEW_TOKEN_KEY}
+  key_previous: ${DYREVIEW_TOKEN_KEY_PREVIOUS}
+
+douyin:
+  base_url: https://open.douyin.com
+  client_key: ${DOUYIN_CLIENT_KEY}
+  client_secret: ${DOUYIN_CLIENT_SECRET}
+  timeout_seconds: 15
+  retries: 3
+  retry_backoff_seconds: 1.5
+  qps: 4                            # 客户端全局限速（官方按应用/接口限流，留余量）
+
+  token:
+    # 剩余寿命判定：剩余 <= min(总寿命*ratio, refresh_before_seconds) 时提前刷新
+    refresh_before_ratio: 0.3
+    refresh_before_seconds: 86400
+    # refresh_token 剩余不足该天数时，跑 renew 续期，避免客户被动掉授权
+    renew_before_days: 7
+    # 刷新失败重试（网络/限流类），token 失效类不重试，直接标记 reauth_required
+    refresh_retries: 2
+
+  # 接口路径集中在这里，官方改版只改配置不改代码
+  endpoints:
+    oauth_access_token: /oauth/access_token/
+    oauth_refresh_token: /oauth/refresh_token/
+    oauth_renew_refresh_token: /oauth/renew_refresh_token/
+    oauth_client_token: /oauth/client_token/
+    userinfo: /oauth/userinfo/
+    user_data: /api/douyin/v1/user/user_data/
+    fan_data: /api/douyin/v1/user/fan_data/
+    video_list: /api/douyin/v1/video/video_list/
+    video_data: /api/douyin/v1/video/video_data/
+
+  # 错误码分类（默认值按官方《错误码》表整理，实测若有偏差在此覆盖）
+  error_codes:
+    token_invalid: ["2190008", "2190012", "10008"]
+    refresh_invalid: ["2190002", "2190003"]
+    rate_limited: ["2190005", "1000005", "429"]
+    scope_missing: ["2190006"]
+
+  batch:
+    video_list_count: 20            # 视频列表单页条数
+    video_data_batch: 20            # 视频指标单次 item_ids 上限
+    max_video_pages: 25             # 单次采集最多翻多少页，防无限翻页
+    video_data_rounds: 3            # 指标拉取并发轮次（串行批次，避免打爆限流）
+
+collect:
+  lookback_days: 30                 # 增量采集时回看多少天内的作品
+  fan_profile_weekday: 0            # 每周几（0=周一）拉一次粉丝画像
+  keep_days: 730                    # 指标快照保留天数
+
+review:
+  default_window_days: 7
+  compare_previous: true
+  min_videos_for_trend: 3
+  # 诊断阈值（规则引擎用；references/metric-dictionary.md 里是同一套口径的解释）
+  thresholds:
+    finish_rate_good: 0.25
+    finish_rate_warn: 0.15
+    interaction_rate_good: 0.05
+    interaction_rate_warn: 0.02
+    play_drop_warn: -0.30           # 环比播放跌幅超过 30% 告警
+    follower_growth_warn: 0.0       # 粉丝净增 <= 0 告警
+    publish_gap_days_warn: 7        # 断更天数
+    low_new_video_ratio_warn: 0.30  # 新发作品占比过低
+  report:
+    template: assets/report-template.md
+    max_chars: 12000
+    numbers_strict: true            # 报告数字必须能在 facts 里找到来源，否则拒绝推送
+
+feishu:
+  base_url: https://open.feishu.cn
+  app_id: ${FEISHU_APP_ID}
+  app_secret: ${FEISHU_APP_SECRET}
+  default_chat_id: ${FEISHU_DEFAULT_CHAT_ID}
+  webhook_url: ${FEISHU_WEBHOOK_URL}
+  push_mode: card                   # card|text|webhook
+  card_max_chars: 3500              # 单张卡片正文上限，超出自动分片续发
+  chunk_max_cards: 4                # 最多续发 4 张，剩余内容落地为 md 文件提示
+
+llm:
+  mode: handoff                     # handoff=交给 Crabot 大模型 | builtin=skill 自己调
+  base_url: ${LLM_BASE_URL}
+  api_key: ${LLM_API_KEY}
+  model: ${LLM_MODEL:-gpt-4o-mini}
+  temperature: 0.3
+  max_output_tokens: 3000
+  timeout_seconds: 120
+
+paths:
+  var_dir: var                      # 事实包/报告/日志落地目录

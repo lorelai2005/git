@@ -1,0 +1,7 @@
+# 运行时依赖（193 服务器 Python 3.10+）
+psycopg[binary]>=3.1        # PostgreSQL 驱动（psycopg 3）
+PyYAML>=6.0                 # 配置文件解析
+cryptography>=42            # 可选：access_token / refresh_token 落库加密（Fernet）
+
+# 开发/自检依赖
+pytest>=8
